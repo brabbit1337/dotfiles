@@ -37,22 +37,22 @@
     },
     
     "custom/gpu-usage": {
-        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
+        "exec": "radeontop -d - -l 1 | grep -oP 'gpu \\K\\d+'",
         "format": "  {}%",
         "return-type": "",
         "interval": 4
     },
 
     "custom/gpu-temperature": {
-        "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits",
+        "exec": "sensors | awk '/edge:/ {gsub(/\\+|°C/,\"\",$2); print $2; exit}'",
         "format": " {}°C",
         "return-type": "",
         "interval": 4
     },
 
     "custom/gpu-power": {
-        "exec": "nvidia-smi --query-gpu=power.draw --format=csv,noheader",
-        "format": " {}",
+        "exec": "cat /sys/class/drm/card1/device/hwmon/hwmon*/power1_average | awk '{print int($1/1000000)}'",
+        "format": " {} W",
         "return-type": "",
         "interval": 4
     },
@@ -94,7 +94,7 @@
         "tooltip-format-ethernet": " {ifname}",
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50,
-        "exec": "ghostty -e nmcli dev wifi "
+        "exec": "alacritty -e nmcli dev wifi "
     },
 
     "custom/updates":{
@@ -102,7 +102,7 @@
         "exec": "checkupdates | wc -l",
         //"exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
         "interval": 1800,
-        "on-click": "kitty -e paru -Syu && notify-send 'The system has been updated' "
+        "on-click": "alacritty -e paru -Syu && notify-send 'The system has been updated' "
     },	
         
     "pulseaudio": {
