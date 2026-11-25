@@ -1,1 +1,0 @@
-/home/gyorkosi/.local/share/neovim/titus-kickstart/init.lua
